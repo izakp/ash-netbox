@@ -100,7 +100,7 @@ SECRET_KEY = '<%= $secret_key %>'
 # application errors (assuming correct email settings are provided).
 
 ADMINS = [
-    <%= $admins.map |$v| { String([$v['name'], $v['email']])}.join(",\n    ") %>
+    <%= $admins.map |$v| { [$v['name'], $v['email']] }.join(",\n    ") %>
 ]
 
 # Optionally display a persistent banner at the top and/or bottom of every page. HTML is allowed. To display the same
