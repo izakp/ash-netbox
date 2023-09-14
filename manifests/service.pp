@@ -19,12 +19,14 @@ class netbox::service (
   String $group,
 ){
 
+  $netbox_rq_pid_file = '/var/tmp/netbox-rq.pid'
   $netbox_pid_file = '/var/tmp/netbox.pid'
 
   $service_params_netbox_rq = {
     'netbox_home'  => "${install_root}/netbox",
     'user'         => $user,
     'group'        => $group,
+    'pidfile'      => $netbox_rq_pid_file,
   }
 
   $service_params_netbox = {
