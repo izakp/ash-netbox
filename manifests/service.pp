@@ -19,14 +19,12 @@ class netbox::service (
   String $group,
 ){
 
-  $netbox_rq_pid_file = '/var/tmp/netbox-rq.pid'
   $netbox_pid_file = '/var/tmp/netbox.pid'
 
   $service_params_netbox_rq = {
     'netbox_home'  => "${install_root}/netbox",
     'user'         => $user,
     'group'        => $group,
-    'pidfile'      => $netbox_rq_pid_file,
   }
 
   $service_params_netbox = {
@@ -51,7 +49,7 @@ class netbox::service (
   file { 'netbox.service':
     path    => '/etc/systemd/system/netbox.service',
     ensure  => 'present',
-    content => epp('netbox/netbox.service.epp', $service_params_netbox_rq),
+    content => epp('netbox/netbox.service.epp', $service_params_netbox),
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
