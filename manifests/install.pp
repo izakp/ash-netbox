@@ -80,14 +80,14 @@ class netbox::install (
 ) {
 
   $packages =[
-    gcc,
-    python3.11,
-    python3.11-devel,
-    libxml2-devel,
-    libxslt-devel,
-    libffi-devel,
-    openssl-devel,
-    redhat-rpm-config
+    'gcc',
+    'python3.11',
+    'python3.11-devel',
+    'libxml2-devel',
+    'libxslt-devel',
+    'libffi-devel',
+    'openssl-devel',
+    'redhat-rpm-config'
   ]
 
   $local_tarball = "${download_tmp_dir}/netbox-${version}.tar.gz"
