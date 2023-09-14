@@ -34,15 +34,28 @@ class netbox::service (
     'pidfile'      => $netbox_pid_file,
   }
 
-  systemd::unit_file { 'netbox-rq.service':
+  file { 'netbox-rq.service':
+    path    => '/etc/systemd/system/netbox-rq.service',
+    ensure  => 'present',
     content => epp('netbox/netbox-rq.service.epp', $service_params_netbox_rq),
-    enable  => true,
-    active  => true,
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+  }
+  -> service { 'netbox-rq.service':
+      ensure => 'running',
   }
 
-  systemd::unit_file { 'netbox.service':
-    content => epp('netbox/netbox.service.epp', $service_params_netbox),
-    enable  => true,
-    active  => true,
+  file { 'netbox.service':
+    path    => '/etc/systemd/system/netbox.service',
+    ensure  => 'present',
+    content => epp('netbox/netbox.service.epp', $service_params_netbox_rq),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
   }
+  -> service { 'netbox.service':
+      ensure => 'running',
+  }
+
 }
