@@ -74,6 +74,7 @@ class netbox::install (
   Boolean $include_napalm,
   Boolean $include_django_storages,
   Boolean $include_ldap,
+  String $python_executable,
   Boolean $install_dependencies_from_filesystem,
   Stdlib::Absolutepath $python_dependency_path,
   Enum['tarball', 'git_clone'] $install_method = 'tarball',
@@ -178,7 +179,7 @@ class netbox::install (
   }
 
   exec { "python_venv_${venv_dir}":
-    command => "/usr/bin/python3 -m venv ${venv_dir}",
+    command => "${python_executable} -m venv ${venv_dir}",
     user    => $user,
     creates => "${venv_dir}/bin/activate",
     cwd     => '/tmp',

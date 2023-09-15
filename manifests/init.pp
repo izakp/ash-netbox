@@ -236,6 +236,7 @@ class netbox (
   Stdlib::Absolutepath $install_root = '/opt',
   Boolean $handle_database = true,
   Boolean $handle_redis = true,
+  String $python_executable = '/usr/bin/python3',
   Boolean $install_dependencies_from_filesystem = false,
   Stdlib::Absolutepath $python_dependency_path = '/srv/python_dependencies',
   Boolean $include_napalm = true,
@@ -314,6 +315,7 @@ class netbox (
     include_napalm                       => $include_napalm,
     include_django_storages              => $include_django_storages,
     include_ldap                         => $include_ldap,
+    python_executable                    => $python_executable,
     install_dependencies_from_filesystem => $install_dependencies_from_filesystem,
     python_dependency_path               => $python_dependency_path,
   }
