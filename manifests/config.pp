@@ -252,5 +252,11 @@ class netbox::config (
     command     => "${venv_dir}/bin/python3 netbox/manage.py collectstatic --no-input",
     require     => File[$config_file],
     refreshonly => true,
+    notify  => Exec['fix static directory permissions'],
+  }
+  exec { 'fix static directory permissions':
+    command     => "find /opt/netbox/netbox/static -type d -exec chmod 755 {} \;",
+    require     => Exec['fix static directory permissions'],
+    refreshonly => false,
   }
 }
