@@ -255,7 +255,7 @@ class netbox::config (
   }
   exec { 'fix static directory permissions':
     command     => "find /opt/netbox/netbox/static -type d -exec chmod 755 {} \;",
-    require     => Exec['fix static directory permissions'],
+    require     => Exec['collect static files'],
     refreshonly => false,
   }
 }
