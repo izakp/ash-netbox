@@ -17,6 +17,7 @@
   Boolean $debug,
   Boolean $enforce_global_unique,
   Boolean $login_required,
+  Boolean $enable_remote_http_auth,
   Boolean $metrics_enabled,
   Boolean $prefer_ipv4,
   Array $exempt_view_permissions,
@@ -251,3 +252,9 @@ TIME_FORMAT = '<%= $time_format %>'
 SHORT_TIME_FORMAT = '<%= $short_time_format %>'
 DATETIME_FORMAT = '<%= $datetime_format %>'
 SHORT_DATETIME_FORMAT = '<%= $short_datetime_format %>'
+
+<% if $enable_remote_http_auth { -%>
+REMOTE_AUTH_ENABLED = True
+REMOTE_AUTH_AUTO_CREATE_USER = True
+REMOTE_AUTH_BACKEND = 'netbox.authentication.RemoteUserBackend'
+<% } -%>
