@@ -128,35 +128,6 @@ Should the PostgreSQL database be handled by this module.
 
 Default value: `true`
 
-##### `include_napalm`
-
-Data type: `Boolean`
-
-NAPALM allows NetBox to fetch live data from devices and return it to a requester via its REST API.
-Installation of NAPALM is optional. To enable it, set $include_napalm to true
-
-Default value: `true`
-
-##### `include_django_storages`
-
-Data type: `Boolean`
-
-By default, NetBox will use the local filesystem to storage uploaded files.
-To use a remote filesystem, install the django-storages library and configure your desired backend in configuration.py.
-
-Default value: `true`
-
-##### `include_ldap`
-
-Data type: `Boolean`
-
-Makes sure the packages and the python modules needed for LDAP-authentication are installed and loaded.
-The LDAP-config itself is not handled by this Puppet module at present.
-Use the documentation found here: https://netbox.readthedocs.io/en/stable/installation/5-ldap/ for information about
-the config file.
-
-Default value: `true`
-
 ##### `email_server`
 
 Data type: `String`
@@ -739,29 +710,6 @@ Data type: `Enum['tarball', 'git_clone']`
 Method for getting the Netbox software
 
 Default value: 'tarball'
-
-##### `include_napalm`
-
-Data type: `Boolean`
-
-NAPALM allows NetBox to fetch live data from devices and return it to a requester via its REST API.
-Installation of NAPALM is optional. To enable it, set $include_napalm to true
-
-##### `include_django_storages`
-
-Data type: `Boolean`
-
-By default, NetBox will use the local filesystem to storage uploaded files.
-To use a remote filesystem, install the django-storages library and configure your desired backend in configuration.py.
-
-##### `include_ldap`
-
-Data type: `Boolean`
-
-Makes sure the packages and the python modules needed for LDAP-authentication are installed and loaded.
-The LDAP-config itself is not handled by this Puppet module at present.
-Use the documentation found here: https://netbox.readthedocs.io/en/stable/installation/6-ldap/ for information about
-the config file.
 
 ##### `install_dependencies_from_filesystem`
 

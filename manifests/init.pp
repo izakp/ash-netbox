@@ -40,20 +40,6 @@
 # @param handle_database
 #   Should the PostgreSQL database be handled by this module.
 #
-# @param include_napalm
-#   NAPALM allows NetBox to fetch live data from devices and return it to a requester via its REST API.
-#   Installation of NAPALM is optional. To enable it, set $include_napalm to true
-#
-# @param include_django_storages
-#   By default, NetBox will use the local filesystem to storage uploaded files.
-#   To use a remote filesystem, install the django-storages library and configure your desired backend in configuration.py.
-#
-# @param include_ldap
-#   Makes sure the packages and the python modules needed for LDAP-authentication are installed and loaded.
-#   The LDAP-config itself is not handled by this Puppet module at present.
-#   Use the documentation found here: https://netbox.readthedocs.io/en/stable/installation/5-ldap/ for information about
-#   the config file.
-#
 # @param email_server
 #   Host name or IP address of the email server (use localhost if running locally)
 #   https://netbox.readthedocs.io/en/stable/configuration/optional-settings/#email
@@ -239,9 +225,6 @@ class netbox (
   String $python_executable = '/usr/bin/python3',
   Boolean $install_dependencies_from_filesystem = false,
   Stdlib::Absolutepath $python_dependency_path = '/srv/python_dependencies',
-  Boolean $include_napalm = true,
-  Boolean $include_django_storages = true,
-  Boolean $include_ldap = true,
   String $database_name       = 'netbox',
   String $database_user       = 'netbox',
   String $database_password   = 'netbox',
@@ -313,9 +296,6 @@ class netbox (
     download_checksum                    => $download_checksum,
     download_checksum_type               => $download_checksum_type,
     download_tmp_dir                     => $download_tmp_dir,
-    include_napalm                       => $include_napalm,
-    include_django_storages              => $include_django_storages,
-    include_ldap                         => $include_ldap,
     python_executable                    => $python_executable,
     install_dependencies_from_filesystem => $install_dependencies_from_filesystem,
     python_dependency_path               => $python_dependency_path,

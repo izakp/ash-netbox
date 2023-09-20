@@ -35,20 +35,6 @@
 # @param install_method
 #   Method for getting the Netbox software
 #
-# @param include_napalm
-#   NAPALM allows NetBox to fetch live data from devices and return it to a requester via its REST API.
-#   Installation of NAPALM is optional. To enable it, set $include_napalm to true
-#
-# @param include_django_storages
-#   By default, NetBox will use the local filesystem to storage uploaded files.
-#   To use a remote filesystem, install the django-storages library and configure your desired backend in configuration.py.
-#
-# @param include_ldap
-#   Makes sure the packages and the python modules needed for LDAP-authentication are installed and loaded.
-#   The LDAP-config itself is not handled by this Puppet module at present.
-#   Use the documentation found here: https://netbox.readthedocs.io/en/stable/installation/5-ldap/ for information about
-#   the config file.
-#
 # @param install_dependencies_from_filesystem
 #   Used if your machine can't reach the place pip would normally go to fetch dependencies
 #   as it would when running "pip install -r requirements.txt". Then you would have to
@@ -71,9 +57,6 @@ class netbox::install (
   Stdlib::Absolutepath $download_tmp_dir,
   String $user,
   String $group,
-  Boolean $include_napalm,
-  Boolean $include_django_storages,
-  Boolean $include_ldap,
   String $python_executable,
   Boolean $install_dependencies_from_filesystem,
   Stdlib::Absolutepath $python_dependency_path,
@@ -88,7 +71,8 @@ class netbox::install (
     'libxslt-devel',
     'libffi-devel',
     'openssl-devel',
-    'redhat-rpm-config'
+    'redhat-rpm-config',
+    'openldap-devel'
   ]
 
   $local_tarball = "${download_tmp_dir}/netbox-${version}.tar.gz"
@@ -96,13 +80,7 @@ class netbox::install (
   $software_directory = "${install_root}/netbox"
   $venv_dir = "${software_directory}/venv"
 
-  $ldap_packages = [openldap-devel]
-
   ensure_packages($packages)
-
-  if $include_ldap {
-    ensure_packages($ldap_packages)
-  }
 
   user { $user:
     system => true,
@@ -144,38 +122,31 @@ class netbox::install (
     ensure => 'link',
     target => $software_directory_with_version,
   }
+
+  file { 'upgrade_script':
+    ensure => 'present',
+    owner  => $user,
+    group  => $group,
+    mode   => '0775',
+    path   => "${software_directory}/upgrade.sh",
+    source => 'upgrade.sh',
+  }
+
+  file { 'local_requirements':
+    ensure => 'present',
+    owner  => $user,
+    group  => $group,
+    mode   => '0644',
+    path   => "${software_directory}/local_requirements.txt",
+    source => 'local_requirements.txt',
+  }
+
   file { 'local_requirements':
     ensure => 'present',
     path   => "${software_directory}/local_requirements.txt",
     owner  => $user,
     group  => $group,
-  }
-
-  if $include_napalm {
-    file_line { 'napalm':
-      path    => "${software_directory}/local_requirements.txt",
-      line    => 'napalm',
-      notify  => Exec['install local python requirements'],
-      require => File['local_requirements']
-    }
-  }
-
-  if $include_django_storages {
-    file_line { 'django_storages':
-      path    => "${software_directory}/local_requirements.txt",
-      line    => 'django-storages',
-      notify  => Exec['install local python requirements'],
-      require => File['local_requirements']
-    }
-  }
-
-  if $include_ldap {
-    file_line { 'ldap':
-      path    => "${software_directory}/local_requirements.txt",
-      line    => 'django-auth-ldap',
-      notify  => Exec['install local python requirements'],
-      require => File['local_requirements']
-    }
+    notify  => Exec['install local python requirements'],
   }
 
   exec { "python_venv_${venv_dir}":
