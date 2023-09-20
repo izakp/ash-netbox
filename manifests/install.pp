@@ -139,13 +139,6 @@ class netbox::install (
     mode   => '0644',
     path   => "${software_directory}/local_requirements.txt",
     source => 'local_requirements.txt',
-  }
-
-  file { 'local_requirements':
-    ensure => 'present',
-    path   => "${software_directory}/local_requirements.txt",
-    owner  => $user,
-    group  => $group,
     notify  => Exec['install local python requirements'],
   }
 
