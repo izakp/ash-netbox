@@ -1,0 +1,3 @@
+<% $local_requirements.each |$package| { -%>
+<%= $package %>
+<% } -%>

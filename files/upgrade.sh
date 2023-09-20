@@ -6,6 +6,12 @@
 # variable (if set), or fall back to "python3". Note that NetBox v3.2+ requires
 # Python 3.8 or later.
 
+if [ "$(whoami)" != "netbox" ]; then
+  echo "This script must be run as the netbox user!"
+  exit 1
+fi
+
+cd "$(dirname "$0")"
 VIRTUALENV="$(pwd -P)/venv"
 PYTHON="${PYTHON:-python3}"
 
@@ -27,7 +33,7 @@ eval $COMMAND || {
 echo "Using ${PYTHON_VERSION}"
 
 # Only recreate the virtualenv if the environment variable RECREATE_VENV is set
-if [ -z "$RECREATE_VENV" ]; then
+if [ -n "$RECREATE_VENV" ]; then
   # Remove the existing virtual environment (if any)
   if [ -d "$VIRTUALENV" ]; then
     COMMAND="rm -rf ${VIRTUALENV}"

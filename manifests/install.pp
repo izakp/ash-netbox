@@ -61,6 +61,7 @@ class netbox::install (
   Boolean $install_dependencies_from_filesystem,
   Stdlib::Absolutepath $python_dependency_path,
   Enum['tarball', 'git_clone'] $install_method = 'tarball',
+  Arrary $local_requirements,
 ) {
 
   $packages =[
@@ -124,22 +125,24 @@ class netbox::install (
   }
 
   file { 'upgrade_script':
-    ensure => 'present',
+    ensure => file,
     owner  => $user,
     group  => $group,
     mode   => '0775',
     path   => "${software_directory}/upgrade.sh",
-    source => 'upgrade.sh',
+    source => file('netbox/upgrade.sh'),
     require => Archive[$local_tarball],
   }
 
-  file { 'local_requirements':
-    ensure => 'present',
+  file { 'local_requirements_file':
+    ensure => file,
     owner  => $user,
     group  => $group,
     mode   => '0644',
     path   => "${software_directory}/local_requirements.txt",
-    source => 'local_requirements.txt',
+    content => epp('netbox/local_requirements.txt.epp', {
+      'local_requirements' => $local_requirements,
+    })
     require => Archive[$local_tarball],
     notify  => Exec['install local python requirements'],
   }
