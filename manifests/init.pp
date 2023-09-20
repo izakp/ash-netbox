@@ -262,7 +262,7 @@ class netbox (
   String $short_time_format = 'H:i:s',
   String $datetime_format = 'N j, Y g:i a',
   String $short_datetime_format = 'Y-m-d H:i',
-  Arrary $local_requirements = ['napalm', 'django-storages', 'django-auth-ldap'],
+  Array $local_requirements = ['napalm', 'django-storages', 'django-auth-ldap'],
 ) {
 
   Class['netbox::install'] -> Class['netbox::config'] ~> Class['netbox::service']
