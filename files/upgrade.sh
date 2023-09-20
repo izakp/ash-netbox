@@ -6,7 +6,6 @@
 # variable (if set), or fall back to "python3". Note that NetBox v3.2+ requires
 # Python 3.8 or later.
 
-cd "$(dirname "$0")"
 VIRTUALENV="$(pwd -P)/venv"
 PYTHON="${PYTHON:-python3}"
 
@@ -27,26 +26,29 @@ eval $COMMAND || {
 }
 echo "Using ${PYTHON_VERSION}"
 
-# Remove the existing virtual environment (if any)
-if [ -d "$VIRTUALENV" ]; then
-  COMMAND="rm -rf ${VIRTUALENV}"
-  echo "Removing old virtual environment..."
-  eval $COMMAND
-else
-  WARN_MISSING_VENV=1
-fi
+# Only recreate the virtualenv if the environment variable RECREATE_VENV is set
+if [ -z "$RECREATE_VENV" ]; then
+  # Remove the existing virtual environment (if any)
+  if [ -d "$VIRTUALENV" ]; then
+    COMMAND="rm -rf ${VIRTUALENV}"
+    echo "Removing old virtual environment..."
+    eval $COMMAND
+  else
+    WARN_MISSING_VENV=1
+  fi
 
-# Create a new virtual environment
-COMMAND="${PYTHON} -m venv ${VIRTUALENV}"
-echo "Creating a new virtual environment at ${VIRTUALENV}..."
-eval $COMMAND || {
-  echo "--------------------------------------------------------------------"
-  echo "ERROR: Failed to create the virtual environment. Check that you have"
-  echo "the required system packages installed and the following path is"
-  echo "writable: ${VIRTUALENV}"
-  echo "--------------------------------------------------------------------"
-  exit 1
-}
+  # Create a new virtual environment
+  COMMAND="${PYTHON} -m venv ${VIRTUALENV}"
+  echo "Creating a new virtual environment at ${VIRTUALENV}..."
+  eval $COMMAND || {
+    echo "--------------------------------------------------------------------"
+    echo "ERROR: Failed to create the virtual environment. Check that you have"
+    echo "the required system packages installed and the following path is"
+    echo "writable: ${VIRTUALENV}"
+    echo "--------------------------------------------------------------------"
+    exit 1
+  }
+fi
 
 # Activate the virtual environment
 source "${VIRTUALENV}/bin/activate"
