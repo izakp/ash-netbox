@@ -130,6 +130,7 @@ class netbox::install (
     mode   => '0775',
     path   => "${software_directory}/upgrade.sh",
     source => 'upgrade.sh',
+    require => Archive[$local_tarball],
   }
 
   file { 'local_requirements':
@@ -139,6 +140,7 @@ class netbox::install (
     mode   => '0644',
     path   => "${software_directory}/local_requirements.txt",
     source => 'local_requirements.txt',
+    require => Archive[$local_tarball],
     notify  => Exec['install local python requirements'],
   }
 
