@@ -101,22 +101,22 @@ class netbox::install (
   }
 
   archive { $local_tarball:
-      source        => $download_url,
-      checksum      => $download_checksum,
-      checksum_type => $download_checksum_type,
-      extract       => true,
-      extract_path  => $install_root,
-      creates       => $software_directory_with_version,
-      cleanup       => true,
-      notify        => Exec['install python requirements'],
-    }
+    source        => $download_url,
+    checksum      => $download_checksum,
+    checksum_type => $download_checksum_type,
+    extract       => true,
+    extract_path  => $install_root,
+    creates       => $software_directory_with_version,
+    cleanup       => true,
+    notify        => Exec['install python requirements'],
+  }
 
-    exec { 'netbox permission':
-      command     => "chown -R ${user}:${group} ${software_directory_with_version}",
-      path        => ['/usr/bin'],
-      subscribe   => Archive[$local_tarball],
-      refreshonly => true,
-    }
+  exec { 'netbox permission':
+    command     => "chown -R ${user}:${group} ${software_directory_with_version}",
+    path        => ['/usr/bin'],
+    subscribe   => Archive[$local_tarball],
+    refreshonly => true,
+  }
 
   file { $software_directory:
     ensure => 'link',
